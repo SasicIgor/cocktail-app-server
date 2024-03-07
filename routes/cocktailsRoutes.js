@@ -6,11 +6,12 @@ const {
   updateCocktail,
   deleteCocktail,
 } = require("./../controller/cocktailsController");
-const {signup}=require("./../controller/authController")
+const {signup, login}=require("./../controller/authController")
 
 const router = express.Router();
 
 router.post("/signup", signup)
+router.post("/login", login) 
 
 router.route("/").get(getAllCocktails).post(addNewCocktail);
 
