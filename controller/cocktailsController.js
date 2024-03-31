@@ -3,7 +3,6 @@ const Cocktail = require("../model/cocktailModel");
 const getAllCocktails = async (req, res) => {
   try {
     const cocktails = await Cocktail.find();
-
     res.status(200).json({
       status: "success",
       results: cocktails.length,
@@ -23,12 +22,11 @@ const addNewCocktail = async (req, res) => {
   console.log(1);
   try {
     console.log(2);
+    console.log(req.body)
     const newCocktail = await Cocktail.create(req.body);
     res.status(201).json({
       status: "success",
-      data: {
-        cocktail: newCocktail,
-      },
+      data: newCocktail
     });
     console.log(3);
   } catch (err) {
@@ -42,7 +40,9 @@ const addNewCocktail = async (req, res) => {
 
 const getCocktail = async (req, res) => {
   try {
+    console.log(1)
     const cocktail = await Cocktail.findById(req.params.id);
+    console.log(cocktail)
     res.status(200).json({
       status: "success",
       data: cocktail,
@@ -86,10 +86,29 @@ const deleteCocktail = async (req, res) => {
   }
 };
 
+const getCocktailsByAuthor = async (req,res) =>{
+  try{
+    let user=req.params
+    const cocktail= await Cocktail.find(user);
+    console.log(cocktail)
+    res.status(200).json({
+      status:"success",
+      data:cocktail
+    })
+  }catch (err){
+    res.status(404).json({
+      status:"fail",
+      message: err
+    })
+  }
+
+}
+
 module.exports = {
   getAllCocktails,
   addNewCocktail,
   getCocktail,
   updateCocktail,
   deleteCocktail,
+  getCocktailsByAuthor
 };

@@ -8,59 +8,78 @@ const signToken = (id) => {
 };
 
 const signup = async (req, res, next) => {
+  try {
+    const { username, email } = req.body;
+    const user = await User.findOne({ username });
+    if (user) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Username already exist.",
+      });
+    }
+    const emailExist = await User.findOne({ email });
+    if (emailExist) {
+      return res.status(400).json({
+        status: "fail",
+        message: "email address already in use",
+      });
+    }
 
-  try{
     const newUser = await User.create({
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
       passwordConfirmed: req.body.passwordConfirmed,
     });
-
     const token = signToken(newUser._id);
-
-    res.status(201).json({
+    // res.cookie("jwt", token, cookieConfig);
+    return res.status(200).json({
       status: "success",
       token,
-      data: newUser,
+      data: newUser.username,
     });
-  }catch(err){
-    res.status(401).json({
-      status:"fail",
-      message: err
-    })
+  } catch (err) {
+    res.status(500).json({
+      status: "fail3",
+      message: err,
+    });
   }
-
-
 };
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({
-      status: "fail",
-      message: "Invalid request",
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid request",
+      });
+    }
+
+    const user = await User.findOne({ email }).select("+password");
+    const passwordCheck = await user.correctPassword(password, user.password);
+
+    if (!user || !passwordCheck) {
+      return res.status(401).json({
+        status: "fail",
+        message: "Invalid credentials",
+      });
+    }
+
+    const token = signToken(user._id);
+    // res.cookie("jwt", token, cookieConfig);
+    res.status(200).json({
+      status: "success",
+      token,
+      data: user.username,
+      message: "Your login attempt was successfull"
     });
+  } catch (err) {
+    res.status(400).json({
+      message:err
+    })
   }
-
-  const user = await User.findOne({ email }).select("+password");
-  const passwordCheck = await user.correctPassword(password, user.password);
-
-  if (!user || !passwordCheck) {
-    return res.status(401).json({
-      status: "fail",
-      message: "Invalid credentials",
-    });
-  }
-
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: "success",
-    token,
-    data: [],
-  });
 };
 
 // work  in progress
@@ -104,6 +123,4 @@ const login = async (req, res, next) => {
 module.exports = {
   signup,
   login,
-  forgotPassword,
-  resetPassword,
 };

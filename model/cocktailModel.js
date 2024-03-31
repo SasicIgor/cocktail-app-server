@@ -4,30 +4,30 @@ const cocktailSchema = new mongoose.Schema({
   name: {
     type:  String,
   },
-  // image: {
-  //   type: String,
-  //   default: `${__dirname}/images/No_Image_Available`,
-  // },
-  // ingredients: {
-  //   spirits: {
-  //     type: Object,
-  //     default: undefined,
-  //   },
-  //   juice: {
-  //     type: Object,
-  //     default: undefined,
-  //   },
-  //   decoration: {
-  //     type: Object,
-  //     default: undefined,
-  //   },
-  //   others: {
-  //     type: Object,
-  //     default: undefined,
-  //   },
-  // },
+  image: {
+    type: String,
+    default: "/images/No_Image_Available.jpg",
+  },
+  ingredients: {
+    spirits: {
+      type: Object,
+      default: undefined,
+    },
+    decoration: {
+      type: String,
+      default: undefined,
+    },
+    others: {
+      type: Object,
+      default: undefined,
+    },
+  },
   method: Number,
   glass: Number,
+  description: {
+    type: String,
+    required: true
+  },
   author: {
     type: String,
     default: "unknown",
