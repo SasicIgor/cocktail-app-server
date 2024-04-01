@@ -18,14 +18,14 @@ const cocktailSchema = new mongoose.Schema({
       default: undefined,
     },
     others: {
-      type: Object,
+      type: String,
       default: undefined,
     },
   },
   method: Number,
   glass: Number,
   description: {
-    type: String,
+    type: Object,
     required: true
   },
   author: {

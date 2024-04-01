@@ -3,6 +3,7 @@ const Cocktail = require("../model/cocktailModel");
 const getAllCocktails = async (req, res) => {
   try {
     const cocktails = await Cocktail.find();
+    console.log(cocktails)
     res.status(200).json({
       status: "success",
       results: cocktails.length,
@@ -24,7 +25,7 @@ const addNewCocktail = async (req, res) => {
     console.log(2);
     console.log(req.body)
     const newCocktail = await Cocktail.create(req.body);
-    res.status(201).json({
+    res.status(200).json({
       status: "success",
       data: newCocktail
     });
@@ -56,9 +57,8 @@ const getCocktail = async (req, res) => {
 };
 const updateCocktail = async (req, res) => {
   try {
-    const cocktail = await Cocktail.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    console.log(1)
+    const cocktail = await Cocktail.findByIdAndUpdate(req.params.id, req.body );
     console.log(cocktail);
     res.status(200).json({
       status: "success",
@@ -73,10 +73,11 @@ const updateCocktail = async (req, res) => {
 };
 const deleteCocktail = async (req, res) => {
   try {
+    const id=req.params.id;
     await Cocktail.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: "success",
-      data: []
+      data: id
     });
   } catch (err) {
     res.status(404).json({
