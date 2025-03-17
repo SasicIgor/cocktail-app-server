@@ -41,9 +41,7 @@ const addNewCocktail = async (req, res) => {
 
 const getCocktail = async (req, res) => {
   try {
-    console.log(1)
     const cocktail = await Cocktail.findById(req.params.id);
-    console.log(cocktail)
     res.status(200).json({
       status: "success",
       data: cocktail,
@@ -57,8 +55,7 @@ const getCocktail = async (req, res) => {
 };
 const updateCocktail = async (req, res) => {
   try {
-    console.log(1)
-    const cocktail = await Cocktail.findByIdAndUpdate(req.params.id, req.body );
+    const cocktail = await Cocktail.findByIdAndUpdate(req.params.id, req.body, {new:true});
     console.log(cocktail);
     res.status(200).json({
       status: "success",

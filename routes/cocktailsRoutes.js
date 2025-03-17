@@ -7,7 +7,8 @@ const {
   deleteCocktail,
   getCocktailsByAuthor
 } = require("./../controller/cocktailsController");
-const {signup, login}=require("./../controller/authController")
+const {validateToken}=require("./../utils/auth")
+
 
 const router = express.Router();
 
@@ -19,5 +20,8 @@ router.route("/:id/editCocktail")
 
 router.route("/contributors/:author").get(getCocktailsByAuthor);
 
-router.route("/contributors/makeCocktail").post(addNewCocktail);
+router.route("/contributors/makeCocktail").post(validateToken, addNewCocktail);
 module.exports = router;
+
+
+// validateToken, 
